@@ -1,0 +1,195 @@
+<html lang="en">
+{% load static %}
+ {%load crispy_forms_tags %}
+ <head>
+  <title>Social life issues</title>
+  <!-- Meta tag -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <!-- CSS files -->
+  <link rel="stylesheet" href="{%static 'myapp/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{%static 'myapp/css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{%static 'myapp/css/style.css' %}" type="text/css" media="all" />
+  </head>
+ <body>
+    <div class="social-cover" >
+    <!-- header -->
+    <header class="header">
+      <div class="container-fluid px-lg-5">
+        <nav class="py-4">
+          <div class="social-img">
+            <img src="{% static 'myapp/images/laa.jpg' %}" alt="logo" width="100", height="80">
+          </div>
+          <label for="form" class="formation">Menu</label>
+          <input type="checkbox" id="form" />
+          <ul class="menu-formation mt-3">
+            <!-- navigation links -->
+              <li><a href="myapp:homepage">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#addsocialissue">Social Issue</a></li>
+
+        {% if request.user.is_authenticated %}
+          <li><a href="{% url 'myapp:logout_view'%}" style="color: white;">Logout[{{ request.user.username }}]</a>
+          </li>
+        {% else %}
+               <li><a href="#exampleModal" data-toggle="modal">Signup</a></li>
+            <li><a href="#exampleModal1" data-toggle="modal">Login</a></li>
+
+        {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- banner -->
+        <div class="banner-info text-left">
+      <div class="message">
+    {% for i in messages %}
+          <h1> <button class="btn btn-danger">{{ user }}, {{ i }}</button></h1>
+    {% endfor %}
+    </div>
+              <h3>Unite2Fight</h3>
+
+        </div>
+
+  </div>
+
+
+  <!-- about -->
+  <section class="py-5" id="about">
+    <div class="container py-xl-5 py-lg-3">
+      <h3 class="heading mb-4">About Us</h3>
+      <div class="row">
+        <div class="col-lg-6">
+          <p class="mb-4 text-justify">
+            We gives users a platform to raise awareness about social causes
+            and bring about the change in world that they wish to see.
+            Using this platform, users can submit the social causes which they support or in which they want help.
+            We are here for the people, to support their causes and to make a remarkable impact on the society.
+            Our vision is to focused onto the betterment of the society and the world.
+            We are here to aware people about the ongoing issues that are faced by people in today's world.
+          </p>
+        </div>
+        <div class="col-lg-6">
+          <img src="{%static 'myapp/images/la.jpg' %}" alt="image" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+  <!-- social issues -->
+  <section class="social-bodycolor py-md-5 py-4" id="socialissues">
+
+    <div class="container py-md-5 py-4">
+      <h3 class="heading mb-lg-5 mb-3"> Social Issues</h3>
+        <div class="owl-carousel owl-theme">
+        {% for object in object_list %}
+          <div class="ml-2 mr-2">
+          <div class="card">
+                <img src="{{ object.image.url }}" alt="si" class="card-img-top" class="img-fluid">
+               <div class="card-body">
+                   <strong>{{ object.title }}</strong><br/>
+            {{ object.description }}
+               </div>
+          </div>
+          </div>
+        {% endfor %}
+    </div>
+    </div>
+  </section>
+
+
+<!-- add social issue -->
+<section class="social-bodycolor py-md-5 py-4" id="addsocialissue">
+  <div class="container py-md-5 py-4">
+    <h3 class="heading mb-lg-5 mb-3"> Add Social Issues</h3>
+    <div class="web-forms mt-5">
+      <div class="">
+        <form action="{% url 'myapp:s_form' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+        {{ s_form|crispy }}
+            <button type="submit" class="save btn btn-default">Submit </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- copyright -->
+<div class="social-copyright text-center py-3">
+  <p class="">2021 © Social Welfare.
+  </p>
+</div>
+
+    <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content" style="padding: 20px;">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Sign Up</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+                <form method="post" action="{% url 'myapp:signup' %}">
+                    {% csrf_token %}
+                    {{ sign_form|crispy }}
+                    <button class="btn btn-outline-primary" type="submit">Sign Up</button>
+                </form>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content" style="padding: 20px;">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel1">Login Form</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="web-forms mt-2">
+                <form method="post" action="{% url 'myapp:login_user' %}">
+                    {% csrf_token %}
+                    {{ login_form|crispy }}
+                    <button class="btn btn-outline-primary" type="submit">Login</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- JS files -->
+<script src="{%static 'myapp/js/jquery-3.5.1.slim.min.js' %}"></script>
+<script src="{%static 'myapp/js/bootstrap.min.js' %}"></script>
+ <script src="{%static 'myapp/js/owl.carousel.min.js' %}"></script>
+ <script>
+$('.owl-carousel').owlCarousel({
+  loop:true,
+  margin:10,
+  nav:true,
+  autoplay:true,
+  autoplayTimeout:1000,
+  autoplayHoverPause:true,
+  responsive:{
+    0:{
+      items:1
+    },
+    600:{
+      items:2
+    },
+    1000:{
+      items:3
+    }
+  }
+});
+</script>
+
+ </body>
+ </html>
